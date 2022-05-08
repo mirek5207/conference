@@ -3,7 +3,9 @@ package com.example.conference.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
+
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 
 @Entity
 @Builder
@@ -19,6 +21,7 @@ public class User {
     @Column(name = "login", nullable = false, unique = true)
     private String login;
 
+    @Email(message = "Email should be valid")
     @Column(name = "email", nullable = false, unique = true)
     private String email;
 
