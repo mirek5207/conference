@@ -6,6 +6,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import java.util.Set;
 
 @Entity
 @Builder
@@ -16,17 +17,23 @@ import javax.validation.constraints.Email;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
     private Long id;
 
-    @Column(name = "login", nullable = false, unique = true)
+    @Column(name = "login", nullable = false)
     private String login;
 
     @Email(message = "Email should be valid")
-    @Column(name = "email", nullable = false, unique = true)
+    @Column(name = "email", nullable = false)
     private String email;
 
-    @ManyToOne
+    @ManyToMany
+    @JoinTable(
+            name = "user_lecture",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "lecture_id")
+    )
     @JsonIgnore
-    private Lecture lecture;
+    private Set<Lecture> lectureSet;
 
 }

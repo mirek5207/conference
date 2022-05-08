@@ -17,12 +17,13 @@ import java.util.Set;
 public class Lecture {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "lecture_id")
     private Long id;
 
     @Column(name = "name", nullable = false, unique = true)
     private String name;
 
-    @OneToMany(mappedBy = "lecture")
+    @ManyToMany(mappedBy = "lectureSet")
     private Set<User> userSet = new HashSet<>();
 
     @ManyToOne
