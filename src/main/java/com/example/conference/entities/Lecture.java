@@ -1,5 +1,6 @@
 package com.example.conference.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -25,5 +26,6 @@ public class Lecture {
     private Set<User> userSet = new HashSet<>();
 
     @ManyToOne
+    @JsonIgnore
     private Course course;
 }

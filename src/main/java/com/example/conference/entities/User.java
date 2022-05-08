@@ -1,5 +1,6 @@
 package com.example.conference.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -22,6 +23,7 @@ public class User {
     private String email;
 
     @ManyToOne
+    @JsonIgnore
     private Lecture lecture;
 
 }

@@ -1,9 +1,9 @@
 package com.example.conference.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -21,6 +21,7 @@ public class Course {
     private String name;
 
     @OneToMany(mappedBy = "course")
+    @JsonIgnore
     private Set<Lecture> lectureSet;
 
 }
