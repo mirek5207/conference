@@ -25,7 +25,6 @@ public class UserServiceImpl implements UserService {
     public User addUserToLecture(Long lectureId, String login, String email) {
         Lecture lecture = lectureRepository.findById(lectureId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Nie znaleziono wykładu o takim id"));
         User user = getUserIfExist(login,email);
-
         if(user != null && checkIfUserCanReserveLecture(lecture,user)){
             user.getLectureSet().add(lecture);
         }
@@ -47,6 +46,15 @@ public class UserServiceImpl implements UserService {
     public void deleteReservation(Long lectureId, String login, String email) {
         User user = getUserIfExist(login,email);
         lectureRepository.deleteReservedLecture(user.getId(),lectureId);
+    }
+
+    @Override
+    public User updateEmail(String login, String email) {
+        User user = userRepository.findUserByLogin(login);
+        if(user != null) user.setEmail(email);
+        else throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Nie odnaleziono użytkownika o podanym loginie");
+        userRepository.save(user);
+        return user;
     }
 
     private User getUserIfExist(String login, String email){
@@ -71,6 +79,5 @@ public class UserServiceImpl implements UserService {
         else {
             return true;
         }
-
     }
 }
