@@ -13,7 +13,7 @@ import java.util.Set;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/conference/user")
+@RequestMapping("/conference/user/lecture")
 public class UserController {
 
     private final UserService userService;
@@ -24,9 +24,14 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
-    @GetMapping(value = "/lecture")
+    @GetMapping(value = "/all")
     public ResponseEntity<Set<Lecture>> getAllUserLecture(@RequestParam String login){
         Set<Lecture> lectureList = userService.getAllUserLecture(login);
         return ResponseEntity.ok(lectureList);
+    }
+    @DeleteMapping(value = "/reservation/cancel")
+    public ResponseEntity<?> deleteReservation(@RequestParam Long lectureId, @RequestBody UserRequest userRequest){
+        userService.deleteReservation(lectureId,userRequest.getLogin(),userRequest.getEmail());
+        return ResponseEntity.noContent().build();
     }
 }
