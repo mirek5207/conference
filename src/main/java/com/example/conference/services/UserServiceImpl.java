@@ -9,8 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -25,24 +24,30 @@ public class UserServiceImpl implements UserService {
     @Override
     public User addUserToLecture(Long lectureId, String login, String email) {
         Lecture lecture = lectureRepository.findById(lectureId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Nie znaleziono wykładu o takim id"));
-        Set<Lecture> lectureSet = new HashSet<>();
-        User user = getUserIfExist(login,email);
-        if(user != null){
-            lectureSet = user.getLectureSet();
-        }
         if(lecture.getUserSet().size() >= 5){
             throw new ResponseStatusException(HttpStatus.FORBIDDEN,"Limit miejsc wykorzystany, brak możliwości zapisu na wykład");
         }
-        else{
-            lectureSet.add(lecture);
-            user = new User(null,login,email,lectureSet);
-            userRepository.save(user);
+        User user = getUserIfExist(login,email);
+        if(user != null){
+            user.getLectureSet().add(lecture);
         }
+        else{
+            Set<Lecture> lectures = new HashSet<>();
+            lectures.add(lecture);
+            user = new User(null,login,email,lectures);
+        }
+        userRepository.save(user);
         return user;
     }
+
+    @Override
+    public Set<Lecture> getAllUserLecture(String login) {
+        return lectureRepository.getLecture(login);
+    }
+
     private User getUserIfExist(String login, String email){
         User user = userRepository.findUserByLogin(login);
-        if(user != null && (user.getEmail() != email)){
+        if(user != null && !(user.getEmail().equals(email))){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Podany login jest już zajęty");
         }
         return user;
