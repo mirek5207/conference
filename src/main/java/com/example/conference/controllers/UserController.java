@@ -27,8 +27,13 @@ public class UserController {
 
     @GetMapping(value = "/lectures")
     public ResponseEntity<Set<Lecture>> getAllUserLecture(@RequestParam String login){
-        Set<Lecture> lectureList = userService.getAllUserLecture(login);
-        return ResponseEntity.ok(lectureList);
+        Set<Lecture> lectureSet = userService.getAllUserLecture(login);
+        return ResponseEntity.ok(lectureSet);
+    }
+    @GetMapping(value = "/users")
+    public ResponseEntity<Set<User>> getAllUser(){
+        Set<User> userSet = userService.getAllUser();
+        return ResponseEntity.ok(userSet);
     }
     @PatchMapping(value = "/email")
     public ResponseEntity<User> updateUserEmail(@RequestParam String login, @RequestBody UpdateUserRequest updateUserRequest){
