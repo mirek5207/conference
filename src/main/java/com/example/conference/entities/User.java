@@ -6,6 +6,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -27,13 +28,15 @@ public class User {
     @Column(name = "email", nullable = false)
     private String email;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY,cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinTable(
             name = "user_lecture",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "lecture_id")
     )
     @JsonIgnore
-    private Set<Lecture> lectureSet;
+    private Set<Lecture> lectureSet = new HashSet<>();
+
+
 
 }
