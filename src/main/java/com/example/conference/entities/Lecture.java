@@ -23,10 +23,15 @@ public class Lecture {
     @Column(name = "name", nullable = false, unique = true)
     private String name;
 
+    @Column(name = "time_frame", nullable = false)
+    private String timeFrame;
+
     @ManyToMany(mappedBy = "lectureSet")
+    @JsonIgnore
     private Set<User> userSet = new HashSet<>();
 
     @ManyToOne
     @JsonIgnore
     private Course course;
+
 }
