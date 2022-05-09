@@ -43,6 +43,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Set<User> getAllUser() {
+        return userRepository.findAll();
+    }
+
+    @Override
     public void deleteReservation(Long lectureId, String login, String email) {
         User user = getUserIfExist(login,email);
         lectureRepository.deleteReservedLecture(user.getId(),lectureId);

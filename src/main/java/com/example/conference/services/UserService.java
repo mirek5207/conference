@@ -13,4 +13,5 @@ public interface UserService {
     Set<Lecture> getAllUserLecture(String login);
     void deleteReservation(Long lectureId, String login, String email);
     User updateEmail(String login, String email);
+    Set<User> getAllUser();
 }
