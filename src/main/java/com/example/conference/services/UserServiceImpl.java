@@ -24,11 +24,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public User addUserToLecture(Long lectureId, String login, String email) {
         Lecture lecture = lectureRepository.findById(lectureId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Nie znaleziono wykładu o takim id"));
-        if(lecture.getUserSet().size() >= 5){
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN,"Limit miejsc wykorzystany, brak możliwości zapisu na wykład");
-        }
         User user = getUserIfExist(login,email);
-        if(user != null){
+
+        if(user != null && checkIfUserCanReserveLecture(lecture,user)){
             user.getLectureSet().add(lecture);
         }
         else{
@@ -39,7 +37,22 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
         return user;
     }
+    public boolean checkIfUserCanReserveLecture(Lecture lecture,User user){
+        Set<Lecture> userLectureSet = user.getLectureSet();
+        String timeOfLecture = lecture.getTimeFrame();
+        for (Lecture lect : userLectureSet) {
+            if(lect.getTimeFrame().equals(timeOfLecture)){
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Użytkownik uczestniczy już w innej prelekcji o tej porze, brak możliwości zapisu");
+            }
+        }
+        if(lecture.getUserSet().size() >= 5){
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN,"Limit miejsc wykorzystany, brak możliwości zapisu na wykład");
+        }
+        else {
+            return true;
+        }
 
+    }
     @Override
     public Set<Lecture> getAllUserLecture(String login) {
         return lectureRepository.getLecture(login);
