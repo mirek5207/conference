@@ -9,6 +9,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
@@ -34,6 +38,7 @@ public class UserServiceImpl implements UserService {
             user = new User(null,login,email,lectures);
         }
         userRepository.save(user);
+        saveToFile(getDate(),email, ("Lecture:" + lecture.getName() + "\n" + "Time frame:"+ lecture.getTimeFrame()));
         return user;
     }
 
@@ -84,5 +89,24 @@ public class UserServiceImpl implements UserService {
         else {
             return true;
         }
+    }
+
+    private void saveToFile(String date, String email,String description)  {
+        try{
+            FileWriter fileWriter = new FileWriter("powiadomienia",true);
+            PrintWriter printWriter = new PrintWriter(fileWriter);
+            printWriter.printf("Date: %s \n",date);
+            printWriter.printf("Email: %s \n",email);
+            printWriter.printf("%s \n\n",description);
+            printWriter.close();
+        }catch(IOException e){
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,"Nie udało się wysłać powiadomienia o dołączeniu użytkownika do wykładu");
+        }
+
+    }
+    private String getDate(){
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        Date date = new Date();
+        return formatter.format(date);
     }
 }
