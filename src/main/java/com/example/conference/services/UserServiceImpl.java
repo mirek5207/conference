@@ -37,6 +37,26 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
         return user;
     }
+
+    @Override
+    public Set<Lecture> getAllUserLecture(String login) {
+        return lectureRepository.getLecture(login);
+    }
+
+    @Override
+    public void deleteReservation(Long lectureId, String login, String email) {
+        User user = getUserIfExist(login,email);
+        lectureRepository.deleteReservedLecture(user.getId(),lectureId);
+    }
+
+    private User getUserIfExist(String login, String email){
+        User user = userRepository.findUserByLogin(login);
+        if(user != null && !(user.getEmail().equals(email))){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Podany login jest już zajęty");
+        }
+        return user;
+    }
+
     public boolean checkIfUserCanReserveLecture(Lecture lecture,User user){
         Set<Lecture> userLectureSet = user.getLectureSet();
         String timeOfLecture = lecture.getTimeFrame();
@@ -53,17 +73,4 @@ public class UserServiceImpl implements UserService {
         }
 
     }
-    @Override
-    public Set<Lecture> getAllUserLecture(String login) {
-        return lectureRepository.getLecture(login);
-    }
-
-    private User getUserIfExist(String login, String email){
-        User user = userRepository.findUserByLogin(login);
-        if(user != null && !(user.getEmail().equals(email))){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Podany login jest już zajęty");
-        }
-        return user;
-    }
-
 }
