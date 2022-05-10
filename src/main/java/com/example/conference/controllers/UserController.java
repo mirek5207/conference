@@ -14,7 +14,6 @@ import java.util.Set;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/user")
 public class UserController {
 
     private final UserService userService;
@@ -30,17 +29,12 @@ public class UserController {
         Set<Lecture> lectureSet = userService.getAllUserLecture(login);
         return ResponseEntity.ok(lectureSet);
     }
-    @GetMapping(value = "/users")
-    public ResponseEntity<Set<User>> getAllUser(){
-        Set<User> userSet = userService.getAllUser();
-        return ResponseEntity.ok(userSet);
-    }
     @PatchMapping(value = "/email")
     public ResponseEntity<User> updateUserEmail(@RequestParam String login, @RequestBody UpdateUserRequest updateUserRequest){
         User user = userService.updateEmail(login,updateUserRequest.getEmail());
         return ResponseEntity.ok(user);
     }
-    @DeleteMapping(value = "lecture/reservation/")
+    @DeleteMapping(value = "/lecture/reservation/")
     public ResponseEntity<?> deleteReservation(@RequestParam Long lectureId, @RequestBody UserRequest userRequest){
         userService.deleteReservation(lectureId,userRequest.getLogin(),userRequest.getEmail());
         return ResponseEntity.noContent().build();
