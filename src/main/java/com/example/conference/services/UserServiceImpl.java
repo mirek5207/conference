@@ -44,7 +44,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Set<Lecture> getAllUserLecture(String login) {
-        return lectureRepository.getLecture(login);
+        return lectureRepository.getLectures(login);
+    }
+
+    @Override
+    public Lecture getUserLectureById(String login, String lectureId){
+        return lectureRepository.getLectureByIdAndLogin(login, lectureId).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Nie znaleziono wykładu o podanym id dla takiego użytkownika, zapisz się na kurs"));
     }
 
     @Override

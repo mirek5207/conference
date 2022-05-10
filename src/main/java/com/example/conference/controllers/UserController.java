@@ -24,10 +24,15 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
-    @GetMapping(value = "/lectures")
+    @GetMapping(value = "/lectures/")
     public ResponseEntity<Set<Lecture>> getAllUserLecture(@RequestParam String login){
         Set<Lecture> lectureSet = userService.getAllUserLecture(login);
         return ResponseEntity.ok(lectureSet);
+    }
+    @GetMapping(value = "/lecture/{login}/")
+    public ResponseEntity<Lecture> getUserLecture(@PathVariable String login, @RequestParam String lectureId){
+        Lecture lecture = userService.getUserLectureById(login,lectureId);
+        return ResponseEntity.ok(lecture);
     }
     @PatchMapping(value = "/email")
     public ResponseEntity<User> updateUserEmail(@RequestParam String login, @RequestBody UpdateUserRequest updateUserRequest){
