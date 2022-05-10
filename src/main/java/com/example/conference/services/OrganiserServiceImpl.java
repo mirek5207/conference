@@ -6,6 +6,7 @@ import com.example.conference.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
 import java.util.Set;
 
 @Service
@@ -23,6 +24,11 @@ public class OrganiserServiceImpl implements OrganiserService {
     @Override
     public Set<User> getAllUser() {
         return userRepository.findAll();
+    }
+
+    @Override
+    public Set<String> getLecturesReport() {
+        return lectureRepository.getPercentageOfUsersParticipatingInLectures();
     }
 
     public String getConferencePlan(){

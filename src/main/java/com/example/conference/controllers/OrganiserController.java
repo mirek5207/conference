@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
 import java.util.Set;
 
 @RestController
@@ -26,6 +27,12 @@ public class OrganiserController {
     public ResponseEntity<Set<User>> getAllUser(){
         Set<User> userSet = organiserService.getAllUser();
         return ResponseEntity.ok(userSet);
+    }
+
+    @GetMapping(value = "/lectures/report")
+    public ResponseEntity<Set<String>> getLecturesReport(){
+        Set<String> report = organiserService.getLecturesReport();
+        return ResponseEntity.ok(report);
     }
 
 }
