@@ -14,4 +14,6 @@ public interface OrganiserService {
     Set<User> getAllUser();
 
     Set<String> getLecturesReport();
+
+    Set<String> getCoursesReport();
 }

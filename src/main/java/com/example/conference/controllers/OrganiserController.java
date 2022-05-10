@@ -35,4 +35,10 @@ public class OrganiserController {
         return ResponseEntity.ok(report);
     }
 
+    @GetMapping(value = "/courses/report")
+    public ResponseEntity<Set<String>> getCoursesReport(){
+        Set<String> report = organiserService.getCoursesReport();
+        return ResponseEntity.ok(report);
+    }
+
 }

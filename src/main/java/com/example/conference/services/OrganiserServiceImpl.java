@@ -1,6 +1,7 @@
 package com.example.conference.services;
 
 import com.example.conference.entities.User;
+import com.example.conference.repositories.CourseRepository;
 import com.example.conference.repositories.LectureRepository;
 import com.example.conference.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,11 +15,13 @@ public class OrganiserServiceImpl implements OrganiserService {
 
     private UserRepository userRepository;
     private LectureRepository lectureRepository;
+    private CourseRepository courseRepository;
 
     @Autowired
-    public OrganiserServiceImpl(UserRepository userRepository, LectureRepository lectureRepository) {
+    public OrganiserServiceImpl(UserRepository userRepository, LectureRepository lectureRepository, CourseRepository courseRepository) {
         this.userRepository = userRepository;
         this.lectureRepository = lectureRepository;
+        this.courseRepository = courseRepository;
     }
 
     @Override
@@ -30,6 +33,12 @@ public class OrganiserServiceImpl implements OrganiserService {
     public Set<String> getLecturesReport() {
         return lectureRepository.getPercentageOfUsersParticipatingInLectures();
     }
+
+    @Override
+    public Set<String> getCoursesReport() {
+        return courseRepository.getPercentageOfUsersParticipatingInEachCourse();
+    }
+
 
     public String getConferencePlan(){
         return "<h2>PLAN KONFERENCJI IT</h2><br>" +
