@@ -21,5 +21,12 @@ public interface LectureRepository extends CrudRepository<Lecture,Long> {
     @Modifying
     @Query(value = "DELETE FROM USER_LECTURE WHERE USER_LECTURE.USER_ID = :userId AND USER_LECTURE.LECTURE_ID = :lectureId",nativeQuery = true)
     void deleteReservedLecture(Long userId, Long lectureId);
+    
+    @Query(value = "SELECT USER_LECTURE.LECTURE_ID, LECTURE.NAME, CONCAT((COUNT(USER_LECTURE.USER_ID))*100/5 ,'% obecności') FROM USER_LECTURE\n" +
+            "INNER JOIN LECTURE ON LECTURE.LECTURE_ID = USER_LECTURE.LECTURE_ID \n" +
+            "GROUP BY USER_LECTURE.LECTURE_ID"
+            ,nativeQuery = true)
+    Set<String> getPercentageOfUsersParticipatingInLectures();
+
 
 }
