@@ -9,8 +9,6 @@ import java.util.Set;
 @Service
 public interface OrganiserService {
 
-    String getConferencePlan();
-
     Set<User> getAllUser();
 
     Set<String> getLecturesReport();
